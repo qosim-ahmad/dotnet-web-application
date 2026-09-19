@@ -1,0 +1,29 @@
+@* Render menu tree secara rekursif. Model: (daftar item, level kedalaman) *@
+@model (IReadOnlyList<AdminPanel.Models.MenuItem> Items, int Level)
+
+<ul class="menu-list" role="@(Model.Level == 0 ? "tree" : "group")">
+    @foreach (var item in Model.Items)
+    {
+        if (item.IsGroup)
+        {
+            <li class="menu-group" role="treeitem" aria-expanded="false" data-key="@item.Key">
+                <button type="button" class="menu-toggle" style="--level:@Model.Level">
+                    <i class="bi @item.Icon menu-icon"></i>
+                    <span class="menu-label">@item.Title</span>
+                    <i class="bi bi-chevron-right menu-chevron"></i>
+                </button>
+                <partial name="_MenuTree" model="(item.Children!, Model.Level + 1)" />
+            </li>
+        }
+        else
+        {
+            <li class="menu-leaf" role="treeitem">
+                <a class="menu-link" href="@item.Url" style="--level:@Model.Level"
+                   data-key="@item.Key" data-title="@item.Title" data-icon="@item.Icon">
+                    <i class="bi @item.Icon menu-icon"></i>
+                    <span class="menu-label">@item.Title</span>
+                </a>
+            </li>
+        }
+    }
+</ul>

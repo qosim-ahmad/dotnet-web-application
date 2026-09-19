@@ -1,0 +1,37 @@
+@* Layout untuk halaman yang tampil DI DALAM tab (iframe): tanpa sidebar & header. *@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <script>
+        // Jika halaman ini dibuka langsung (bukan di dalam tab), buka lewat workspace
+        if (window.top === window.self) {
+            location.replace('/Admin?open=' + encodeURIComponent(location.pathname + location.search));
+        }
+    </script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="embed-page">
+    <main class="p-3 p-lg-4">
+        <partial name="_Alerts" />
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Link dengan atribut data-open-tab dibuka sebagai tab baru di workspace
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest('a[data-open-tab]');
+            if (!a || !window.top.AdminWorkspace) return;
+            e.preventDefault();
+            window.top.AdminWorkspace.openUrl(a.getAttribute('href'), a.dataset.openTab || a.textContent.trim());
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

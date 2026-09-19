@@ -1,0 +1,13 @@
+@model (string Label, int Value, string Icon, string Color)
+
+<div class="card border-0 shadow-sm h-100">
+    <div class="card-body d-flex align-items-center gap-3">
+        <div class="stat-icon bg-@Model.Color-subtle text-@Model.Color-emphasis">
+            <i class="bi @Model.Icon"></i>
+        </div>
+        <div>
+            <div class="text-body-secondary small">@Model.Label</div>
+            <div class="fs-3 fw-bold lh-sm">@Model.Value</div>
+        </div>
+    </div>
+</div>

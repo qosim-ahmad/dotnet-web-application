@@ -1,0 +1,59 @@
+@model IReadOnlyList<MenuItem>
+@{
+    var current = Model[^1];
+    ViewData["Title"] = current.Title;
+}
+
+<!-- Breadcrumb: grup > subgrup > halaman -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb small mb-2">
+        @foreach (var node in Model.Take(Model.Count - 1))
+        {
+            <li class="breadcrumb-item text-body-secondary">@node.Title</li>
+        }
+        <li class="breadcrumb-item active" aria-current="page">@current.Title</li>
+    </ol>
+</nav>
+
+<div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+    <div class="page-icon"><i class="bi @current.Icon"></i></div>
+    <div class="me-auto">
+        <h1 class="h4 fw-bold mb-0">@current.Title</h1>
+        <p class="text-body-secondary mb-0">@current.Description</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm" disabled><i class="bi bi-download me-1"></i>Export</button>
+        <button class="btn btn-primary btn-sm" disabled><i class="bi bi-plus-lg me-1"></i>Tambah Data</button>
+    </div>
+</div>
+
+<div class="alert alert-info d-flex align-items-center gap-2 py-2 small">
+    <i class="bi bi-cone-striped"></i>
+    <span>Halaman ini masih <strong>dummy</strong> (kode menu: <code>@current.Key</code>). Fungsinya akan dibuat di tahap berikutnya.</span>
+</div>
+
+<!-- Kerangka tabel placeholder -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-body border-0 d-flex gap-2 pt-3">
+        <input class="form-control form-control-sm" style="max-width:260px" placeholder="Cari @current.Title.ToLower()..." disabled />
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="table-light">
+                <tr><th style="width:60px">No</th><th>Kode</th><th>Nama</th><th>Status</th><th class="text-end">Aksi</th></tr>
+            </thead>
+            <tbody class="placeholder-glow">
+                @for (var i = 1; i <= 5; i++)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td><span class="placeholder col-8 rounded"></span></td>
+                        <td><span class="placeholder col-@(4 + i % 4) rounded"></span></td>
+                        <td><span class="placeholder col-5 rounded"></span></td>
+                        <td class="text-end"><span class="placeholder col-4 rounded"></span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

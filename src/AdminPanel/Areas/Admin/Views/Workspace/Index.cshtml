@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Workspace";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+@* Konfigurasi awal untuk workspace.js *@
+<script id="wsConfig" type="application/json">
+    @Json.Serialize(new
+    {
+        home = new { key = "dashboard", title = "Dashboard", icon = "bi-grid-1x2", url = Url.Action("Index", "Dashboard", new { area = "Admin" }) },
+        openUrl = ViewData["OpenUrl"] as string,
+        storageKey = "adminpanel.tabs." + User.Identity?.Name,
+    })
+</script>

@@ -1,0 +1,88 @@
+@inject AdminPanel.Services.IMenuService MenuService
+@{
+    var menu = MenuService.GetMenu();
+}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+    <link rel="icon" href="~/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.png" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="workspace">
+    <div class="admin-shell">
+        <!-- ===== Sidebar: tetap di layar besar, jadi menu geser (offcanvas) di HP ===== -->
+        <aside id="sidebar" class="admin-sidebar offcanvas-lg offcanvas-start text-bg-dark" tabindex="-1" aria-label="Menu utama">
+            <div class="offcanvas-header">
+                <span class="fs-5 fw-semibold"><img src="~/img/logo.png" alt="" class="brand-logo me-2" />Admin Panel</span>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Tutup"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column p-0 min-h-0">
+                <a class="sidebar-brand d-none d-lg-flex" href="~/Admin">
+                    <img src="~/img/logo.png" alt="" class="brand-logo me-2" />Admin Panel
+                </a>
+
+                <!-- Search menu -->
+                <div class="menu-search">
+                    <i class="bi bi-search"></i>
+                    <input id="menuSearch" type="search" class="form-control form-control-sm" placeholder="Cari menu..."
+                           autocomplete="off" aria-label="Cari menu" />
+                    <kbd class="menu-search-kbd d-none d-lg-inline">Ctrl K</kbd>
+                </div>
+
+                <nav class="menu-tree" id="menuTree" aria-label="Navigasi">
+                    <partial name="_MenuTree" model="(menu, 0)" />
+                    <div class="menu-empty" id="menuEmpty" hidden>
+                        <i class="bi bi-search d-block fs-4 mb-1"></i>Menu tidak ditemukan
+                    </div>
+                </nav>
+
+                <div class="menu-footer">
+                    <button type="button" class="btn btn-sm btn-link text-white-50 text-decoration-none p-0" id="menuCollapseAll">
+                        <i class="bi bi-arrows-collapse me-1"></i>Tutup semua grup
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== Area utama ===== -->
+        <div class="admin-main">
+            <header class="workspace-header">
+                <button class="btn btn-outline-secondary btn-sm d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-label="Menu">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <!-- Tab bar -->
+                <ul class="ws-tabs" id="wsTabs" role="tablist" aria-label="Halaman terbuka"></ul>
+
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light ws-tab-action" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Aksi tab">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><button class="dropdown-item" type="button" data-ws-action="reload"><i class="bi bi-arrow-clockwise me-2"></i>Muat ulang tab</button></li>
+                        <li><button class="dropdown-item" type="button" data-ws-action="close-others"><i class="bi bi-x-square me-2"></i>Tutup tab lain</button></li>
+                        <li><button class="dropdown-item" type="button" data-ws-action="close-all"><i class="bi bi-x-lg me-2"></i>Tutup semua tab</button></li>
+                    </ul>
+                </div>
+
+                <partial name="_LoginPartial" />
+            </header>
+
+            <!-- Isi tab (iframe per tab) -->
+            <div class="ws-frames" id="wsFrames"></div>
+        </div>
+    </div>
+
+    @RenderBody()
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/workspace.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
